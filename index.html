@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: The Lumina Imperium Reading List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Energetic & Playful -->
+    <!-- Application Structure Plan: This infographic is designed as a single, scrollable narrative that visually breaks down the "Lumina Imperium" reading list. It starts with a strong headline and introduction, followed by a series of data-driven sections. A responsive grid layout is used to present key metrics in "cards," making the data digestible. The flow guides the user from the overall composition (continents, eras) to specific examples (featured books), and concludes with a summary of the list's diversity. This structure was chosen to tell a compelling story with the data, making a complex report accessible and engaging for a broad audience. -->
+    <!-- Visualization & Content Choices:
+        1. Continental Representation -> Goal: Compare. Viz: Donut Chart. Justification: Excellent for showing the proportional breakdown of the list's geographic origins at a glance. Method: Chart.js/Canvas.
+        2. Historical Periods -> Goal: Compare. Viz: Bar Chart. Justification: Best for comparing the number of books across distinct, ordered categories (eras). Method: Chart.js/Canvas.
+        3. Genre Diversity -> Goal: Compare. Viz: Horizontal Bar Chart. Justification: Allows for easy comparison of various genre counts with clear, readable labels. Method: Chart.js/Canvas.
+        4. Language & Gender Diversity -> Goal: Inform. Viz: "Big Number" text visualization. Justification: Creates a high-impact, memorable display of key diversity metrics. Method: HTML/CSS.
+        5. Featured Books -> Goal: Inform/Organize. Viz: HTML/CSS cards. Justification: Provides specific, tangible examples from the list, highlighting their significance and grounding the abstract data. Method: HTML/CSS.
+        Confirmation: NO SVG used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #fef8f1; /* Soft cream background */
+        }
+        h1, h2, h3 {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            margin: auto;
+            height: 350px;
+            width: 100%;
+            max-width: 450px;
+        }
+        .bar-chart-container {
+            position: relative;
+            margin: auto;
+            height: 400px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .book-card-img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Header -->
+        <header class="text-center my-12 md:my-16">
+            <h1 class="text-4xl md:text-6xl font-bold text-[#FF6B6B]">The Lumina Imperium</h1>
+            <p class="mt-4 text-lg md:text-xl text-[#4ECDC4] max-w-3xl mx-auto">A Visual Journey Through 100 Essential Books Shaping Our World</p>
+        </header>
+
+        <!-- Introduction Section -->
+        <section class="my-16 md:my-24 max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold text-center text-[#45B7D1] mb-6">Illuminating Global Literary Expression</h2>
+            <p class="text-center text-lg text-gray-700 leading-relaxed">
+                The Lumina Imperium is more than a reading list; it's a curated experience designed to capture the breadth of human storytelling. This infographic visualizes the immense diversity of the 100 selected works, showcasing their origins across continents, eras, and genres. We've translated the comprehensive research report into a clear, engaging narrative to highlight the global and cultural significance of these essential reads.
+            </p>
+        </section>
+
+        <!-- Main Grid for Stats -->
+        <main class="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 my-12">
+
+            <!-- Continental Representation -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                <h3 class="text-2xl font-bold text-center text-[#45B7D1] mb-4">A Map of Voices: Continental Representation</h3>
+                <p class="text-center text-gray-600 mb-6">The list ensures a global perspective, deliberately moving beyond traditional literary canons to include significant works from every corner of the world.</p>
+                <div class="chart-container">
+                    <canvas id="continentsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Historical Periods -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                <h3 class="text-2xl font-bold text-center text-[#45B7D1] mb-4">A Journey Through Time: Historical Eras</h3>
+                 <p class="text-center text-gray-600 mb-6">From ancient epics carved in stone to the dynamic narratives of the 21st century, the collection spans the entirety of human literary history.</p>
+                <div class="bar-chart-container">
+                    <canvas id="periodsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Genre Diversity -->
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 lg:col-span-2 transform hover:-translate-y-2 transition-transform duration-300">
+                <h3 class="text-2xl font-bold text-center text-[#45B7D1] mb-4">Exploring Every Narrative Form</h3>
+                <p class="text-center text-gray-600 mb-6 max-w-3xl mx-auto">The collection celebrates all forms of literary expression, from foundational philosophy and epic poetry to modern graphic novels and groundbreaking science writing.</p>
+                <div class="bar-chart-container h-[500px]">
+                    <canvas id="genresChart"></canvas>
+                </div>
+            </div>
+        </main>
+
+        <!-- Diversity Metrics Section -->
+        <section class="my-16 md:my-24">
+            <h2 class="text-3xl font-bold text-center text-[#45B7D1] mb-8">Metrics of a Truly Global List</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-center">
+                <div class="bg-white rounded-2xl shadow-xl p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-6xl md:text-7xl font-bold text-[#FF6B6B]">22+</p>
+                    <h4 class="text-xl font-semibold text-gray-700 mt-4">Original Languages</h4>
+                    <p class="text-gray-600 mt-2">Including Akkadian, Classical Japanese, K'iche', and Malayalam, ensuring a deep dive into diverse linguistic traditions.</p>
+                </div>
+                <div class="bg-white rounded-2xl shadow-xl p-8 transform hover:-translate-y-2 transition-transform duration-300">
+                    <p class="text-6xl md:text-7xl font-bold text-[#FF6B6B]">25%+</p>
+                    <h4 class="text-xl font-semibold text-gray-700 mt-4">Female Authors</h4>
+                    <p class="text-gray-600 mt-2">A conscious effort to amplify female voices across history, from Murasaki Shikibu to Olga Tokarczuk.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- All Books Section -->
+        <section class="my-16 md:my-24">
+            <h2 class="text-3xl font-bold text-center text-[#45B7D1] mb-8">The Complete Lumina Imperium: 100 Essential Reads</h2>
+            <div id="allBooksContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                <!-- Book cards will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <footer class="text-center my-12 md:my-16">
+            <h2 class="text-3xl font-bold text-[#45B7D1]">A Universe in 100 Books</h2>
+            <p class="mt-4 text-lg text-gray-700 max-w-3xl mx-auto">This collection is an invitation—a starting point for a lifelong journey of intellectual growth and cultural empathy. Each book is a window into another world, waiting to be opened.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const chartColors = {
+                red: '#FF6B6B',
+                teal: '#4ECDC4',
+                blue: '#45B7D1',
+                yellow: '#FED766',
+                darkBlue: '#1A535C',
+                lightGray: '#F7F7F7',
+                darkGray: '#50514F'
+            };
+            
+            const tooltipTitleCallback = (tooltipItems) => {
+                const item = tooltipItems[0];
+                let label = item.chart.data.labels[item.dataIndex];
+                if (Array.isArray(label)) {
+                  return label.join(' ');
+                } else {
+                  return label;
+                }
+            };
+
+            // Continents Chart (Donut)
+            const continentsCtx = document.getElementById('continentsChart').getContext('2d');
+            new Chart(continentsCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Europe', 'Asia', 'North America', 'Africa', 'South America'],
+                    datasets: [{
+                        data: [34, 20, 20, 7, 5],
+                        backgroundColor: [chartColors.red, chartColors.teal, chartColors.blue, chartColors.yellow, chartColors.darkBlue],
+                        borderColor: '#ffffff',
+                        borderWidth: 4,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { callbacks: { title: tooltipTitleCallback } }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Historical Periods Chart (Bar)
+            const periodsCtx = document.getElementById('periodsChart').getContext('2d');
+            const wrapLabel = (str) => {
+                if (str.length > 16) {
+                    const words = str.split(' ');
+                    let lines = [];
+                    let currentLine = '';
+                    words.forEach(word => {
+                        if ((currentLine + word).length > 16 && currentLine !== '') {
+                            lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine += (currentLine === '' ? '' : ' ') + word;
+                        }
+                    });
+                    if (currentLine !== '') {
+                        lines.push(currentLine);
+                    }
+                    return lines;
+                }
+                return str;
+            };
+            new Chart(periodsCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Ancient', 'Medieval/Early Modern', wrapLabel('Enlightenment/Romantic'), 'Modernist', wrapLabel('Post-WWII/Contemporary')],
+                    datasets: [{
+                        label: 'Number of Books',
+                        data: [9, 10, 10, 8, 63],
+                        backgroundColor: chartColors.teal,
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { title: tooltipTitleCallback } }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+
+            // Genres Chart (Horizontal Bar)
+            const genresCtx = document.getElementById('genresChart').getContext('2d');
+            new Chart(genresCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Novel (General/Historical)', 'Philosophy/Non-Fiction', 'Epic/Poetry', 'Sci-Fi/Fantasy', 'Drama', wrapLabel('Graphic Novel/Satire')],
+                    datasets: [{
+                        label: 'Number of Books',
+                        data: [65, 10, 8, 5, 2, 10], // Approximate breakdown
+                        backgroundColor: [
+                            chartColors.red,
+                            chartColors.teal,
+                            chartColors.blue,
+                            chartColors.yellow,
+                            chartColors.darkBlue,
+                            '#C44569' // New color
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { title: tooltipTitleCallback } }
+                    },
+                    scales: {
+                        x: { beginAtZero: true }
+                    }
+                }
+            });
+
+            const allBooks = [
+                {
+                    title: 'The Epic of Gilgamesh',
+                    author: 'Anonymous (Ancient Mesopotamian scribes)',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/The_Epic_of_Gilgamesh_cover.jpg/330px-The_Epic_of_Gilgamesh_cover.jpg',
+                    significance: 'The oldest surviving great work of literature, it explores themes of friendship, mortality, and the human search for meaning, establishing foundational epic conventions.'
+                },
+                {
+                    title: 'The Book of the Dead (The Papyrus of Ani)',
+                    author: 'Various Ancient Egyptian Scribes',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Book_of_the_Dead_of_Ani_%28facsimile%29.jpg/330px-Book_of_the_Dead_of_Ani_%28facsimile%29.jpg',
+                    significance: 'A collection of ancient Egyptian funerary texts, it provides unparalleled insight into ancient beliefs about the afterlife, magic, and cosmology.'
+                },
+                {
+                    title: 'The Iliad',
+                    author: 'Homer',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Iliad_cover.jpg/330px-Iliad_cover.jpg',
+                    significance: 'This foundational epic of Western literature recounts the siege of Troy, masterfully exploring themes of honor, wrath, fate, and the brutal realities of war.'
+                },
+                {
+                    title: 'The Ramayana',
+                    author: 'Valmiki',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/fa/The_Ramayana_by_Valmiki_cover.jpg/330px-The_Ramayana_by_Valmiki_cover.jpg',
+                    significance: 'One of India\'s two great Sanskrit epics, it narrates the tale of Prince Rama and his quest, deeply influencing South Asian culture, religion, and ethics.'
+                },
+                {
+                    title: 'The Art of War',
+                    author: 'Sun Tzu',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/The_Art_of_War_cover.jpg/330px-The_Art_of_War_cover.jpg',
+                    significance: 'An ancient Chinese military treatise, its strategic principles extend beyond warfare into business, politics, and daily life, making it a timeless classic on conflict resolution.'
+                },
+                {
+                    title: 'One Thousand and One Nights',
+                    author: 'Various authors/translators',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/One_Thousand_and_One_Nights_cover.jpg/330px-One_Thousand_and_One_Nights_cover.jpg',
+                    significance: 'A foundational collection of Middle Eastern and South Asian folk tales, it showcases masterful storytelling, cultural diversity, and enduring human archetypes.'
+                },
+                {
+                    title: 'The Tale of Genji',
+                    author: 'Murasaki Shikibu',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/The_Tale_of_Genji_cover.jpg/330px-The_Tale_of_Genji_cover.jpg',
+                    significance: 'Often considered the world\'s first novel, this masterpiece provides an intimate, detailed portrait of court life, aesthetics, and human relationships in Heian Japan.'
+                },
+                {
+                    title: 'The Canterbury Tales',
+                    author: 'Geoffrey Chaucer',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/The_Canterbury_Tales_cover.jpg/330px-The_Canterbury_Tales_cover.jpg',
+                    significance: 'A vivid tapestry of medieval English society, these tales, told by a diverse group of pilgrims, offer a rich satirical and humorous commentary on human nature.'
+                },
+                {
+                    title: 'The Divine Comedy',
+                    author: 'Dante Alighieri',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Divine_Comedy_cover.jpg/330px-Divine_Comedy_cover.jpg',
+                    significance: 'A monumental epic poem that journeys through Hell, Purgatory, and Paradise, profoundly influencing Christian theology, medieval thought, and the Italian language itself.'
+                },
+                {
+                    title: 'Don Quixote',
+                    author: 'Miguel de Cervantes',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Don_Quixote_cover.jpg/330px-Don_Quixote_cover.jpg',
+                    significance: 'Considered the first modern novel, it brilliantly satirizes chivalric romances while exploring the blurred lines between reality and illusion, idealism and pragmatism.'
+                },
+                {
+                    title: 'Hamlet',
+                    author: 'William Shakespeare',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Hamlet_cover.jpg/330px-Hamlet_cover.jpg',
+                    significance: 'This iconic tragedy delves into themes of revenge, madness, moral corruption, and existential doubt, defining modern theatrical and literary discourse.'
+                },
+                {
+                    title: 'Discourse on the Method',
+                    author: 'René Descartes',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Discourse_on_the_Method_cover.jpg/330px-Discourse_on_the_Method_cover.jpg',
+                    significance: 'A foundational text of modern Western philosophy, it famously introduces the concept of "Cogito, ergo sum" and advocates for systematic doubt and rational inquiry.'
+                },
+                {
+                    title: 'Pensées',
+                    author: 'Blaise Pascal',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/2c/Pens%C3%A9es_cover.jpg/330px-Pens%C3%A9es_cover.jpg',
+                    significance: 'An unfinished defense of Christianity, these brilliant fragments explore human nature, faith, reason, and the "wager" for belief, marked by profound psychological insight.'
+                },
+                {
+                    title: 'Candide',
+                    author: 'Voltaire',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Candide_cover.jpg/330px-Candide_cover.jpg',
+                    significance: 'A biting satire that critiques philosophical optimism and exposes human folly, religious hypocrisy, and the horrors of the 18th century world.'
+                },
+                {
+                    title: 'Frankenstein',
+                    author: 'Mary Shelley',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Frankenstein_cover.jpg/330px-Frankenstein_cover.jpg',
+                    significance: 'A pioneering work of science fiction, it grapples with ethical implications of scientific ambition, creation, abandonment, and the nature of monstrosity.'
+                },
+                {
+                    title: 'Pride and Prejudice',
+                    author: 'Jane Austen',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Pride_and_Prejudice_cover.jpg/330px-Pride_and_Prejudice_cover.jpg',
+                    significance: 'A beloved classic that wittily explores societal conventions, class, marriage, and personal growth in Georgian England, renowned for its enduring characters and sharp social commentary.'
+                },
+                {
+                    title: 'Grimms\' Fairy Tales',
+                    author: 'Jacob and Wilhelm Grimm',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Grimm%27s_Fairy_Tales_cover.jpg/330px-Grimm%27s_Fairy_Tales_cover.jpg',
+                    significance: 'A seminal collection of German folk tales, it deeply influenced Western children\'s literature, folklore studies, and the development of national identity.'
+                },
+                {
+                    title: 'The Brothers Karamazov',
+                    author: 'Fyodor Dostoevsky',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/The_Brothers_Karamazov_cover.jpg/330px-The_Brothers_Karamazov_cover.jpg',
+                    significance: 'A profound philosophical novel that delves into themes of God, free will, morality, and human nature through the complex relationships within a Russian family.'
+                },
+                {
+                    title: 'War and Peace',
+                    author: 'Leo Tolstoy',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/War_and_Peace_cover.jpg/330px-War_and_Peace_cover.jpg',
+                    significance: 'A monumental historical novel portraying the impact of the Napoleonic Wars on aristocratic Russian society, renowned for its epic scope, philosophical interludes, and psychological depth.'
+                },
+                {
+                    title: 'Moby Dick',
+                    author: 'Herman Melville',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/Moby_Dick_cover.jpg/330px-Moby_Dick_cover.jpg',
+                    significance: 'An American epic of whaling, obsession, and the struggle against nature, blending adventure narrative with profound philosophical and symbolic meaning.'
+                },
+                {
+                    title: 'Les Misérables',
+                    author: 'Victor Hugo',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Les_Mis%C3%A9rables_cover.jpg/330px-Les_Mis%C3%A9rables_cover.jpg',
+                    significance: 'A sweeping historical novel that delves into social injustice, poverty, redemption, and revolution in 19th-century France, profoundly shaping Western literary realism.'
+                },
+                {
+                    title: 'Faust',
+                    author: 'Johann Wolfgang von Goethe',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Faust_cover.jpg/330px-Faust_cover.jpg',
+                    significance: 'A towering work of German literature, this dramatic poem explores humanity\'s eternal struggle for knowledge, power, and meaning through a pact with the devil.'
+                },
+                {
+                    title: 'Alice\'s Adventures in Wonderland',
+                    author: 'Lewis Carroll',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Alice_in_Wonderland_cover.jpg/330px-Alice_in_Wonderland_cover.jpg',
+                    significance: 'A whimsical journey into absurdism and logic, this children\'s classic revolutionized fantasy literature and remains a profound influence on culture and art.'
+                },
+                {
+                    title: 'Journey to the West',
+                    author: 'Wu Cheng\'en',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Journey_to_the_West_cover.jpg/330px-Journey_to_the_West_cover.jpg',
+                    significance: 'One of the Four Great Classical Novels of Chinese literature, it\'s a vibrant mythological adventure blending folklore, Buddhist allegory, and humor.'
+                },
+                {
+                    title: 'One Hundred Years of Solitude',
+                    author: 'Gabriel García Márquez',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a0/Cien_a%C3%B1os_de_soledad_%28original_cover%29.jpg/330px-Cien_a%C3%B1os_de_soledad_%28original_cover%29.jpg',
+                    significance: 'A foundational work of magical realism, this epic family saga of the Buendías and the mythical Macondo captures the history, myths, and spirit of Latin America.'
+                },
+                {
+                    title: 'Things Fall Apart',
+                    author: 'Chinua Achebe',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Things_Fall_Apart_%28Chukwuemeka_Ike%29.jpg/330px-Things_Fall_Apart_%28Chukwuemeka_Ike%29.jpg',
+                    significance: 'A pivotal novel in African literature, it powerfully depicts the clash between Igbo traditions and the arrival of European colonialism, offering a nuanced perspective on cultural disruption.'
+                },
+                {
+                    title: 'To the Lighthouse',
+                    author: 'Virginia Woolf',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/07/To_the_Lighthouse_1st_ed.jpg/330px-To_the_Lighthouse_1st_ed.jpg',
+                    significance: 'A modernist masterpiece exploring themes of loss, memory, time, and the ephemeral nature of perception through stream-of-consciousness narrative.'
+                },
+                {
+                    title: 'Ulysses',
+                    author: 'James Joyce',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/24/UlyssesCover.jpg/330px-UlyssesCover.jpg',
+                    significance: 'A landmark modernist novel that revolutionised narrative form and language, recounting a single day in Dublin through a vast array of literary styles and allusions.'
+                },
+                {
+                    title: 'The Metamorphosis',
+                    author: 'Franz Kafka',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/The_Metamorphosis_cover.jpg/330px-The_Metamorphosis_cover.jpg',
+                    significance: 'A chilling and absurd novella exploring themes of alienation, existential anxiety, and the dehumanizing aspects of modern life through its unforgettable premise.'
+                },
+                {
+                    title: 'A Hundred Years of History (History of the Opium War)',
+                    author: 'Mao Dun (Shen Yanbing)',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/8372658-L.jpg',
+                    significance: 'A pioneering work of modern Chinese historical non-fiction, offering a critical analysis of a pivotal moment in China\'s colonial encounter.'
+                },
+                {
+                    title: 'The Stranger',
+                    author: 'Albert Camus',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/The_Stranger_cover.jpg/330px-The_Stranger_cover.jpg',
+                    significance: 'A foundational text of existentialism, it explores the absurdity of human existence and the indifference of the universe through the detached perspective of its protagonist.'
+                },
+                {
+                    title: 'Chronicle of a Death Foretold',
+                    author: 'Gabriel García Márquez',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Chronicle_of_a_Death_Foretold_%28novel%29.jpg/330px-Chronicle_of_a_Death_Foretold_%28novel%29.jpg',
+                    significance: 'A haunting novella that masterfully blurs the lines between journalism and fiction, exploring themes of fate, honor, and collective complicity.'
+                },
+                {
+                    title: 'Beloved',
+                    author: 'Toni Morrison',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/14/Beloved_novel.png/330px-Beloved_novel.png',
+                    significance: 'A powerful and harrowing novel that confronts the brutal legacy of slavery through the story of a mother haunted by her past, winning the Pulitzer Prize.'
+                },
+                {
+                    title: 'Persepolis',
+                    author: 'Marjane Satrapi',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/07/Persepolis_book_cover.jpg/330px-Persepolis_book_cover.jpg',
+                    significance: 'A critically acclaimed graphic novel memoir that offers a unique and personal perspective on the Iranian Revolution and growing up in a complex socio-political landscape.'
+                },
+                {
+                    title: 'The Handmaid\'s Tale',
+                    author: 'Margaret Atwood',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Handmaid%27s_Tale.jpg/330px-Handmaid%27s_Tale.jpg',
+                    significance: 'A dystopian novel that explores totalitarianism, reproductive rights, and the subjugation of women with chilling foresight, becoming a powerful symbol of feminist resistance.'
+                },
+                {
+                    title: 'Blindness',
+                    author: 'José Saramago',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/bb/Blindness_novel.jpg/330px-Blindness_novel.jpg',
+                    significance: 'A powerful allegorical novel exploring human nature and societal collapse when a mysterious epidemic of white blindness afflicts an entire city.'
+                },
+                {
+                    title: 'Norwegian Wood',
+                    author: 'Haruki Murakami',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Norwegian_Wood_%28novel%29.jpg/330px-Norwegian_Wood_%28novel%29.jpg',
+                    significance: 'A melancholic and poignant novel about loss, sexuality, and the complexities of young adult relationships in 1960s Japan, capturing a generation\'s anxieties.'
+                },
+                {
+                    title: 'The God of Small Things',
+                    author: 'Arundhati Roy',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/23/The_God_of_Small_Things_cover.jpg/330px-The_God_of_Small_Things_cover.jpg',
+                    significance: 'A Booker Prize-winning novel that intricately weaves themes of forbidden love, caste, memory, and childhood innocence against the backdrop of political upheaval in Kerala, India.'
+                },
+                {
+                    title: 'The House of the Spirits',
+                    author: 'Isabel Allende',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/The_House_of_the_Spirits_cover.jpg/330px-The_House_of_the_Spirits_cover.jpg',
+                    significance: 'A multi-generational saga blending magical realism with political commentary, chronicling the Trueba family through decades of social and political turmoil in an unnamed Latin American country.'
+                },
+                {
+                    title: 'Nervous Conditions',
+                    author: 'Tsitsi Dangarembga',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/Nervous_Conditions.jpg/330px-Nervous_Conditions.jpg',
+                    significance: 'A powerful semi-autobiographical novel exploring the challenges of colonialism, race, gender, and class through the eyes of a young Zimbabwean girl striving for education.'
+                },
+                {
+                    title: 'Midnight\'s Children',
+                    author: 'Salman Rushdie',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/77/Midnight%27s_Children_%281st_ed%29.jpg/330px-Midnight%27s_Children_%281st_ed%29.jpg',
+                    significance: 'A Booker Prize-winning magical realist novel that chronicles India\'s transition from British colonialism to independence through the metaphor of Saleem Sinai, born at the stroke of midnight.'
+                },
+                {
+                    title: 'The Master and Margarita',
+                    author: 'Mikhail Bulgakov',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/45/The_Master_and_Margarita_%281967_Macmillan_ed%29.jpg/330px-The_Master_and_Margarita_%281967_Macmillan_ed%29.jpg',
+                    significance: 'A satirical masterpiece that intertwines a visit by the Devil to Soviet Moscow with a parallel narrative of Pontius Pilate and Jesus, critiquing authoritarianism and exploring good versus evil.'
+                },
+                {
+                    title: 'Pedro Páramo',
+                    author: 'Juan Rulfo',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Pedro_P%C3%A1ramo.jpg/330px-Pedro_P%C3%A1ramo.jpg',
+                    significance: 'A haunting, influential novel that helped define magical realism, immersing the reader in a ghostly Mexican town inhabited by the echoes of the dead.'
+                },
+                {
+                    title: 'Disgrace',
+                    author: 'J. M. Coetzee',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7d/J_M_Coetzee_Disgrace_cover_2000.jpg/330px-J_M_Coetzee_Disgrace_cover_2000.jpg',
+                    significance: 'A powerful and disturbing novel that confronts post-apartheid South Africa\'s complexities, exploring themes of violence, reconciliation, and personal responsibility.'
+                },
+                {
+                    title: 'One Day in the Life of Ivan Denisovich',
+                    author: 'Aleksandr Solzhenitsyn',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/5/5e/One_Day_in_the_Life_of_Ivan_Denisovich_%28first_edition%29.jpg/330px-One_Day_in_the_Life_of_Ivan_Denisovich_%28first_edition%29.jpg',
+                    significance: 'A groundbreaking novella that offered the world a stark, unflinching look into the Soviet Gulag, exposing the brutal realities of totalitarian oppression.'
+                },
+                {
+                    title: 'The Second Sex',
+                    author: 'Simone de Beauvoir',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c5/Le_Deuxi%C3%A8me_Sexe.jpg/330px-Le_Deuxi%C3%A8me_Sexe.jpg',
+                    significance: 'A monumental work of feminist philosophy and existentialism, it profoundly analyzed the historical oppression and societal construction of "woman," becoming a foundational text for modern feminism.'
+                },
+                {
+                    title: 'Foundation',
+                    author: 'Isaac Asimov',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/Foundation_cover.jpg/330px-Foundation_cover.jpg',
+                    significance: 'A seminal work of science fiction that introduces psychohistory and explores themes of empire, decline, and societal evolution, profoundly influencing the genre.'
+                },
+                {
+                    title: 'Dune',
+                    author: 'Frank Herbert',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/Dune_First_edition.jpg/330px-Dune_First_edition.jpg',
+                    significance: 'A complex and visionary science fiction epic that delves into ecology, politics, religion, and human evolution on a desert planet, creating a lasting cultural phenomenon.'
+                },
+                {
+                    title: 'The Lord of the Rings',
+                    author: 'J.R.R. Tolkien',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e9/The_Lord_of_the_Rings_cover.gif/330px-The_Lord_of_the_Rings_cover.gif',
+                    significance: 'A foundational work of high fantasy, it created an unparalleled immersive world and epic narrative that defined the genre for generations.'
+                },
+                {
+                    title: 'Memoirs of Hadrian',
+                    author: 'Marguerite Yourcenar',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/Memoirs_of_Hadrian_cover.jpg/330px-Memoirs_of_Hadrian_cover.jpg',
+                    significance: 'A historical novel written as a fictional autobiography of the Roman Emperor Hadrian, offering profound meditations on power, love, legacy, and the human condition.'
+                },
+                {
+                    title: 'The Name of the Rose',
+                    author: 'Umberto Eco',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/fa/The_Name_of_the_Rose_cover.jpg/330px-The_Name_of_the_Rose_cover.jpg',
+                    significance: 'A postmodern historical mystery set in a medieval monastery, combining semiotics, biblical analysis, literary theory, and philosophical inquiry into a captivating narrative.'
+                },
+                {
+                    title: 'Love in the Time of Cholera',
+                    author: 'Gabriel García Márquez',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/ae/Love_in_the_Time_of_Cholera_cover.jpg/330px-Love_in_the_Time_of_Cholera_cover.jpg',
+                    significance: 'A timeless novel about enduring love, charting a decades-long romance against the vibrant backdrop of late 19th- and early 20th-century Caribbean society.'
+                },
+                {
+                    title: 'The Alchemist',
+                    author: 'Paulo Coelho',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/TheAlchemist.jpg/330px-TheAlchemist.jpg',
+                    significance: 'A global phenomenon that follows a shepherd boy\'s journey to find treasure, offering profound insights into destiny, personal legends, and listening to one\'s heart.'
+                },
+                {
+                    title: 'Life of Pi',
+                    author: 'Yann Martel',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/23/Life_of_Pi_cover.png/330px-Life_of_Pi_cover.png',
+                    significance: 'A fantastical adventure about a boy stranded on a lifeboat with a Bengal tiger, it explores themes of survival, faith, storytelling, and the nature of reality.'
+                },
+                {
+                    title: 'Sapiens: A Brief History of Humankind',
+                    author: 'Yuval Noah Harari',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Sapiens_A_Brief_History_of_Humankind.jpg/330px-Sapiens_A_Brief_History_of_Humankind.jpg',
+                    significance: 'A groundbreaking non-fiction work that offers a sweeping narrative of human history, from the Stone Age to the present, exploring how cognitive and agricultural revolutions shaped our species.'
+                },
+                {
+                    title: 'The Silk Roads: A New History of the World',
+                    author: 'Peter Frankopan',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/The_Silk_Roads_cover.jpg/330px-The_Silk_Roads_cover.jpg',
+                    significance: 'This revisionist history shifts the focus from West to East, demonstrating the enduring centrality of Eurasia and its trade routes in shaping global civilization.'
+                },
+                {
+                    title: 'My Name Is Red',
+                    author: 'Orhan Pamuk',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/My_Name_is_Red_cover.jpg/330px-My_Name_is_Red_cover.jpg',
+                    significance: 'A multi-layered postmodern novel set in 16th-century Ottoman Istanbul, it blends murder mystery with philosophical debates on art, faith, and identity.'
+                },
+                {
+                    title: 'Kafka on the Shore',
+                    author: 'Haruki Murakami',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/3/30/Kafka_on_the_Shore_cover.jpg/330px-Kafka_on_the_Shore_cover.jpg',
+                    significance: 'A labyrinthine and surreal novel that explores fate, memory, and the unconscious through intertwining narratives, cementing Murakami\'s distinctive magical realist style.'
+                },
+                {
+                    title: 'Purple Hibiscus',
+                    author: 'Chimamanda Ngozi Adichie',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Purple_Hibiscus_book_cover.jpg/330px-Purple_Hibiscus_book_cover.jpg',
+                    significance: 'A powerful debut novel exploring themes of religion, family, freedom, and the legacies of colonialism through the eyes of a young Nigerian girl.'
+                },
+                {
+                    title: 'The Vegetarian',
+                    author: 'Han Kang',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cd/The_Vegetarian_book_cover.jpg/330px-The_Vegetarian_book_cover.jpg',
+                    significance: 'An unsettling and haunting novel exploring rebellion, conformity, and mental health through a woman\'s refusal to eat meat, winning the International Booker Prize.'
+                },
+                {
+                    title: 'The Argonauts',
+                    author: 'Maggie Nelson',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/The_Argonauts_cover.jpg/330px-The_Argonauts_cover.jpg',
+                    significance: 'A genre-bending work that combines memoir, theory, and criticism to explore queer identity, love, family, and the fluidity of language and self.'
+                },
+                {
+                    title: 'Homegoing',
+                    author: 'Yaa Gyasi',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/7b/Homegoing_by_Yaa_Gyasi_cover.jpg/330px-Homegoing_by_Yaa_Gyasi_cover.jpg',
+                    significance: 'A powerful multi-generational saga that traces the descendants of two half-sisters from Ghana, one remaining in Africa and one sold into slavery, profoundly exploring history and legacy.'
+                },
+                {
+                    title: 'Drive Your Plow Over the Bones of the Dead',
+                    author: 'Olga Tokarczuk',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Drive_Your_Plow_Over_the_Bones_of_the_Dead_cover.jpg/330px-Drive_Your_Plow_Over_the_Bones_of_the_Dead_cover.jpg',
+                    significance: 'A unique and unsettling novel that blends eco-fiction, philosophical thriller, and dark comedy, exploring human-animal relationships and societal injustices.'
+                },
+                {
+                    title: 'Season of Migration to the North',
+                    author: 'Tayeb Salih',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Season_of_Migration_to_the_North.jpg/330px-Season_of_Migration_to_the_North.jpg',
+                    significance: 'A pivotal novel in Arab literature, it examines the complex legacies of colonialism, cultural identity, and the clash between East and West through a returning Sudanese intellectual.'
+                },
+                {
+                    title: 'A Brief History of Time',
+                    author: 'Stephen Hawking',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a3/A_Brief_History_of_Time_cover.jpg/330px-A_Brief_History_of_Time_cover.jpg',
+                    significance: 'A landmark work of popular science that made complex theories of cosmology, black holes, and the origins of the universe accessible to a global audience.'
+                },
+                {
+                    title: 'The Art of Loving',
+                    author: 'Erich Fromm',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/8/87/The_Art_of_Loving_cover.jpg/330px-The_Art_of_Loving_cover.jpg',
+                    significance: 'A profound philosophical and psychological treatise that argues love is not a mere feeling but an active art, requiring knowledge, effort, and practice.'
+                },
+                {
+                    title: 'Testimony',
+                    author: 'Shostakovich, Solomon Volkov (compiler)',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/833446-L.jpg',
+                    significance: 'The purported memoirs of Dmitri Shostakovich, offering a harrowing and controversial glimpse into the life of an artist under Soviet totalitarianism.'
+                },
+                {
+                    title: 'The Famished Road',
+                    author: 'Ben Okri',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4e/The_Famished_Road.jpg/330px-The_Famished_Road_cover.jpg',
+                    significance: 'A Booker Prize-winning magical realist novel rooted in Nigerian mythology, following the journey of an abiku (spirit-child) and exploring postcolonial struggles.'
+                },
+                {
+                    title: 'Paradise',
+                    author: 'Abdulrazak Gurnah',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Paradise_%28novel%29_cover.jpg/330px-Paradise_%28novel%29_cover.jpg',
+                    significance: 'A powerful historical novel that explores themes of innocence, betrayal, and the complexities of colonial East Africa through the eyes of a young boy.'
+                },
+                {
+                    title: 'The Tin Drum',
+                    author: 'Günter Grass',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/23/The_Tin_Drum_cover.jpg/330px-The_Tin_Drum_cover.jpg',
+                    significance: 'A sprawling, satirical masterpiece that critiques German society from the rise of Nazism through post-war reconstruction, using the perspective of an enigmatic dwarf.'
+                },
+                {
+                    title: 'Half of a Yellow Sun',
+                    author: 'Chimamanda Ngozi Adichie',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/21/Half_of_a_Yellow_Sun.jpg/330px-Half_of_a_Yellow_Sun.jpg',
+                    significance: 'A compelling historical novel that humanizes the devastating impact of the Nigerian-Biafran War through the interwoven lives of various characters, offering a vital perspective on a overlooked conflict.'
+                },
+                {
+                    title: 'The God of Carnage',
+                    author: 'Yasmina Reza',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/7946955-L.jpg',
+                    significance: 'A sharp, darkly humorous play that exposes the thin veneer of civility when two sets of parents meet to discuss a playground fight, descending into chaos.'
+                },
+                {
+                    title: 'The Corrections',
+                    author: 'Jonathan Franzen',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/cf/The_Corrections_%28Franzen_novel%29_cover.jpg/330px-The_Corrections_%28Franzen_novel%29_cover.jpg',
+                    significance: 'A sprawling, critically acclaimed novel that offers a satirical yet empathetic portrait of an American family grappling with the complexities of modern life, aging, and disillusionment.'
+                },
+                {
+                    title: 'The Inheritance of Loss',
+                    author: 'Kiran Desai',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/44/The_Inheritance_of_Loss_%28Kiran_Desai_novel%29_cover.jpg/330px-The_Inheritance_of_Loss_%28Kiran_Desai_novel%29_cover.jpg',
+                    significance: 'A Booker Prize-winning novel that intricately explores themes of globalization, immigration, and identity through the lives of various characters in the Himalayas and America.'
+                },
+                {
+                    title: 'Americanah',
+                    author: 'Chimamanda Ngozi Adichie',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/e/e0/Americanah_cover.jpg/330px-Americanah_cover.jpg',
+                    significance: 'A powerful and insightful novel that explores race, identity, and the complexities of immigration through the eyes of a young Nigerian woman\'s journey to America and back.'
+                },
+                {
+                    title: 'Exit West',
+                    author: 'Mohsin Hamid',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/63/Exit_West_cover.jpg/330px-Exit_West_cover.jpg',
+                    significance: 'A timely and poignant novel that uses magical realism to portray the harrowing experience of refugees fleeing their war-torn homeland through mysterious doors to new lives.'
+                },
+                {
+                    title: 'Pachinko',
+                    author: 'Min Jin Lee',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/b/b3/Pachinko_by_Min_Jin_Lee.jpg/330px-Pachinko_by_Min_Jin_Lee.jpg',
+                    significance: 'An epic historical novel that chronicles four generations of a Korean family living in Japan, enduring discrimination and hardship, offering a sweeping tale of resilience and identity.'
+                },
+                {
+                    title: 'Lincoln in the Bardo',
+                    author: 'George Saunders',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/18/Lincoln_in_the_Bardo_cover.jpg/330px-Lincoln_in_the_Bardo_cover.jpg',
+                    significance: 'A uniquely structured, experimental novel that explores grief, empathy, and the afterlife through a polyphonic chorus of voices inhabiting a cemetery where Abraham Lincoln mourns his son.'
+                },
+                {
+                    title: 'A Little Life',
+                    author: 'Hanya Yanagihara',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/A_Little_Life_%28Yanagihara_novel%29.jpg/330px-A_Little_Life_%28Yanagihara_novel%29.jpg',
+                    significance: 'A profoundly moving and often harrowing novel about the lifelong friendship of four male college classmates in New York, focusing on the devastating impact of trauma and the transformative power of love.'
+                },
+                {
+                    title: 'The Underground Railroad',
+                    author: 'Colson Whitehead',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/a2/The_Underground_Railroad_%28novel%29_cover.jpg/330px-The_Underground_Railroad_%28novel%29_cover.jpg',
+                    significance: 'A Pulitzer Prize-winning novel that reimagines the Underground Railroad as a literal subterranean train, offering a powerful, fantastical exploration of slavery and freedom.'
+                },
+                {
+                    title: 'Small Island',
+                    author: 'Andrea Levy',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/29/Small_Island_by_Andrea_Levy.jpg/330px-Small_Island_by_Andrea_Levy.jpg',
+                    significance: 'A compelling historical novel exploring the experiences of Jamaican immigrants in post-WWII Britain, revealing the complexities of identity, prejudice, and belonging.'
+                },
+                {
+                    title: 'Flights',
+                    author: 'Olga Tokarczuk',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Flights_Tokarczuk.jpg/330px-Flights_Tokarczuk.jpg',
+                    significance: 'A Man Booker International Prize-winning novel composed of fragmented narratives, exploring themes of travel, human anatomy, and the desire for connection in a constantly moving world.'
+                },
+                {
+                    title: 'The Old Man Who Read Love Stories',
+                    author: 'Luis Sepúlveda',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/11100096-L.jpg',
+                    significance: 'A poignant novella about an old man living in the Amazon rainforest who finds solace in reading romance novels and confronts the destruction of his environment.'
+                },
+                {
+                    title: 'The Master of Go',
+                    author: 'Yasunari Kawabata',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/9681315-L.jpg',
+                    significance: 'A contemplative novel inspired by a real-life Go match, exploring themes of tradition versus modernity, artistic pursuit, and the passage of time.'
+                },
+                {
+                    title: 'The Secret History',
+                    author: 'Donna Tartt',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4b/The_Secret_History_%28novel%29.jpg/330px-The_Secret_History_%28novel%29.jpg',
+                    significance: 'A compelling literary thriller that delves into classical studies, moral ambiguity, and the consequences of intellectual hubris among a group of eccentric college students.'
+                },
+                {
+                    title: 'The House on Mango Street',
+                    author: 'Sandra Cisneros',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/7/77/The_House_on_Mango_Street_first_edition_cover.jpg/330px-The_House_on_Mango_Street_first_edition_cover.jpg',
+                    significance: 'A series of vignettes depicting the life of a young Latina girl growing up in Chicago, beautifully exploring themes of identity, aspiration, and finding one\'s voice.'
+                },
+                {
+                    title: 'Evening Is the Whole Day',
+                    author: 'Preeta Samarasan',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/1138805-L.jpg',
+                    significance: 'A rich and atmospheric debut novel that unearths the secrets and suppressed histories of a wealthy Indian-Malaysian family, set in Malaysia.'
+                },
+                {
+                    title: 'The Prophet',
+                    author: 'Kahlil Gibran',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/The_Prophet_by_Kahlil_Gibran_cover.jpg/330px-The_Prophet_by_Kahlil_Gibran_cover.jpg',
+                    significance: 'A beloved collection of philosophical essays and poems that offer timeless wisdom on topics ranging from love and marriage to joy and sorrow.'
+                },
+                {
+                    title: 'Mythologies',
+                    author: 'Roland Barthes',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/7949033-L.jpg',
+                    significance: 'A foundational work of semiotics and cultural criticism, it brilliantly deconstructs everyday myths and assumptions embedded in popular culture, revealing their underlying ideologies.'
+                },
+                {
+                    title: 'Ways of Seeing',
+                    author: 'John Berger',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/11100096-L.jpg',
+                    significance: 'A highly influential work of art criticism that challenges traditional ways of viewing art and media, exposing inherent biases in representation and power.'
+                },
+                {
+                    title: 'The Republic',
+                    author: 'Plato',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/82/Plato%27s_Republic_cover.jpg/330px-Plato%27s_Republic_cover.jpg',
+                    significance: 'A cornerstone of Western philosophy, it explores justice, the ideal state, the nature of reality, and the education of philosophers through Socratic dialogue.'
+                },
+                {
+                    title: 'Tao Te Ching',
+                    author: 'Laozi',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Tao_Te_Ching_cover.jpg/330px-Tao_Te_Ching_cover.jpg',
+                    significance: 'A fundamental text of Taoism, it presents profound philosophical principles on the nature of reality, governance, and spiritual harmony through poetic aphorisms.'
+                },
+                {
+                    title: 'The Bhagavad Gita',
+                    author: 'Vyasa (traditionally attributed)',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Bhagavad_Gita_cover.jpg/330px-Bhagavad_Gita_cover.jpg',
+                    significance: 'A core scripture of Hinduism, it offers profound philosophical and ethical teachings on dharma, karma, devotion, and the nature of self through a dialogue between Krishna and Arjuna.'
+                },
+                {
+                    title: 'Selected Poems (e.g., from Diwan)',
+                    author: 'Hafez',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Divan_of_Hafez_cover.jpg/330px-Divan_of_Hafez_cover.jpg',
+                    significance: 'A master of the ghazal, Hafez\'s lyrical poetry is revered in Persia for its profound mysticism, playful wit, and timeless explorations of love, wine, and divine beauty.'
+                },
+                {
+                    title: 'The Rubaiyat of Omar Khayyam',
+                    author: 'Omar Khayyam',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Rubaiyat_of_Omar_Khayyam_cover.jpg/330px-Rubaiyat_of_Omar_Khayyam_cover.jpg',
+                    significance: 'A collection of quatrains (rubāʿiyāt) that explore themes of carpe diem, the transient nature of life, and philosophical skepticism with elegant simplicity.'
+                },
+                {
+                    title: 'Popol Vuh',
+                    author: 'Anonymous (K\'iche\' Maya scribes, transcribed by Francisco Ximénez)',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Popol_Vuh_cover.jpg/330px-Popol_Vuh_cover.jpg',
+                    significance: 'The foundational narrative of the K\'iche\' Maya people, recounting their creation myth, hero twins, and history, offering invaluable insight into Mesoamerican cosmology and culture.'
+                },
+                {
+                    title: 'Lāsyā',
+                    author: 'O. V. Vijayan',
+                    imageUrl: 'https://covers.openlibrary.org/b/id/7966779-L.jpg',
+                    significance: 'A seminal work of Malayalam literature, this philosophical novel delves into themes of existentialism, political disillusionment, and the search for meaning in post-independent India.'
+                },
+                {
+                    title: 'The Good Earth',
+                    author: 'Pearl S. Buck',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f6/The_Good_Earth_cover.jpg/330px-The_Good_Earth_cover.jpg',
+                    significance: 'A Pulitzer Prize-winning novel that vividly portrays the lives of a Chinese peasant family in the early 20th century, exploring their deep connection to the land and struggles against poverty and change.'
+                },
+                {
+                    title: 'An Artist of the Floating World',
+                    author: 'Kazuo Ishiguro',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/6/6f/An_Artist_of_the_Floating_World_cover.jpg/330px-An_Artist_of_the_Floating_World_cover.jpg',
+                    significance: 'A poignant novel reflecting on memory, complicity, and the shifting moral landscape of post-World War II Japan through the eyes of an aging painter confronting his past choices.'
+                },
+                {
+                    title: 'The Sympathizer',
+                    author: 'Viet Thanh Nguyen',
+                    imageUrl: 'https://upload.wikimedia.org/wikipedia/en/thumb/d/d4/The_Sympathizer.png/330px-The_Sympathizer.png',
+                    significance: 'A Pulitzer Prize-winning espionage novel and a searing critique of war, identity, and the Vietnamese immigrant experience, told from the perspective of a double agent.'
+                }
+            ];
+
+            const allBooksContainer = document.getElementById('allBooksContainer');
+            
+            allBooks.forEach(book => {
+                const bookCardHtml = `
+                    <div class="bg-white rounded-2xl shadow-xl p-6 flex items-start space-x-4 transform hover:-translate-y-2 transition-transform duration-300">
+                        <img src="${book.imageUrl}" alt="${book.title}" class="book-card-img rounded-md shadow-md">
+                        <div>
+                            <h4 class="font-bold text-lg text-gray-800">${book.title}</h4>
+                            <p class="text-sm font-semibold text-gray-600 mb-2">${book.author}</p>
+                            <p class="text-sm text-gray-700">${book.significance}</p>
+                        </div>
+                    </div>
+                `;
+                allBooksContainer.insertAdjacentHTML('beforeend', bookCardHtml);
+            });
+        });
+    </script>
+</body>
+</html>
